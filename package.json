@@ -1,0 +1,35 @@
+
+{
+  "name": "student-management-system",
+  "version": "1.0.0",
+  "description": "Student Management System desktop app",
+  "main": "main.js",
+  "author": "faithdesigns",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:linux": "electron-builder --linux --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.faithdesigns.studentmanagement",
+    "productName": "Student Management System",
+    "files": [
+      "main.js",
+      "preload.js",
+      "*.html"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Education"
+    },
+    "artifactName": "${productName}-${version}-${os}.${ext}"
+  }
+}
