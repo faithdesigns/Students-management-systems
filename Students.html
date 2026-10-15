@@ -3,11 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Students</title>
+    <title>Students | Student Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
 </head>
+
 <body>
-    <h1>Students Page</h1>
-    <p>Student Management System</p>
-    <a href="../index.html">Home</a>
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">🎓 Student Management System</div>
+        <button class="nav-toggle" type="button">☰ Menu</button>
+        <nav class="nav">
+            <a href="index.html">Home</a>
+            <a href="students.html">Students</a>
+            <a href="courses.html">Courses</a>
+            <a href="attendance.html">Attendance</a>
+            <a href="records.html">Records</a>
+            <a href="reports.html">Reports</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <h1 class="page-title">Student Management</h1>
+    <p class="muted">Register, search, edit, and delete student records.</p>
+
+    <section class="card">
+        <h2 id="form-title">Register a Student</h2>
+
+        <form id="student-form">
+            <input type="hidden" id="student-id">
+
+            <label for="student-name">Full Name</label>
+            <input id="student-name" type="text" required
+                   placeholder="Enter student's full name">
+
+            <label for="student-admission">Admission Number</label>
+            <input id="student-admission" type="text" required
+                   placeholder="e.g. TTI001">
+
+            <label for="student-course">Course</label>
+            <select id="student-course" required>
+                <option value="">Select a course</option>
+                <option>Computer Science</option>
+                <option>Information Technology</option>
+                <option>Business IT</option>
+                <option>Networking</option>
+            </select>
+
+            <label for="student-phone">Phone Number</label>
+            <input id="student-phone" type="tel"
+                   placeholder="Enter phone number">
+
+            <div class="btn-row">
+                <button class="btn" type="submit">Save Student</button>
+                <button class="btn secondary" type="reset">Clear Form</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="card" style="margin-top: 24px;">
+        <h2>Registered Students</h2>
+
+        <label for="student-search">Search Students</label>
+        <input id="student-search" type="search"
+               placeholder="Search by name, admission number, or course">
+
+        <div class="table-wrap">
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Admission No.</th>
+                        <th>Course</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list"></tbody>
+            </table>
+        </div>
+
+        <p id="student-message" class="muted" aria-live="polite"></p>
+    </section>
+</main>
+
 </body>
 </html>
