@@ -1,478 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Home | Lakeside ICT Academy</title>
-<style>
-/* ==========================================================
-   Student Management System - shared styles
-   (This same block is inside every page so each file works alone)
-   ========================================================== */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Lakeside ICT Academy</title>
 
-/* 1. Colour "tokens": change these values to re-theme the whole site */
-:root {
-  --nav: #1f2a44;
-  --ink: #1c2438;
-  --ink-soft: #56607a;
-  --paper: #f3f5f9;
-  --card: #ffffff;
-  --line: #dfe4ee;
-  --btn: #1f7a65;
-  --btn-text: #ffffff;
-  --green: #1f7a65;  --green-bg: #e0f2ed;
-  --gold: #8a5a08;   --gold-bg: #fdf0d5;
-  --red: #b83227;    --red-bg: #fbe3e0;
-  --blue: #2a5aa8;   --blue-bg: #e3ecfa;
-  --radius: 12px;
-  --shadow: 0 1px 2px rgba(20,30,60,.06), 0 4px 14px rgba(20,30,60,.05);
-}
-/* Automatic dark mode if the phone/computer is set to dark */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #e7ebf5; --ink-soft: #9ea9c4; --paper: #0f1524; --card: #18203a;
-    --line: #2a3558; --btn: #4fc2a5; --btn-text: #0f1524;
-    --green: #4fc2a5; --green-bg: #17372f;
-    --gold: #f0b34f;  --gold-bg: #3b2f14;
-    --red: #ff8a7e;   --red-bg: #40201d;
-    --blue: #8db4f2;  --blue-bg: #1c2c4d;
-    --shadow: none;
-  }
-}
-
-/* 2. Base page styles */
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0; background: var(--paper); color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 16px; line-height: 1.5;
-}
-h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height: 1.2; margin: 0 0 .5rem; }
-h1 { font-size: 1.75rem; }
-h2 { font-size: 1.25rem; }
-h3 { font-size: 1.05rem; }
-p { margin: 0 0 .75rem; }
-a { color: var(--blue); }
-.muted { color: var(--ink-soft); }
-.small { font-size: .85rem; }
-.container { max-width: 1100px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
-.page-title { margin-bottom: 1.25rem; }
-.page-title p { margin: 0; }
-
-/* 3. Header and navigation (menu button on phones, row of links on computers) */
-.site-header { background: var(--nav); color: #fff; position: sticky; top: 0; z-index: 20; }
-.header-inner {
-  max-width: 1100px; margin: 0 auto; padding: .6rem 1rem;
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-}
-.brand { font-family: Georgia, serif; font-weight: 700; font-size: 1.1rem; color: #fff; text-decoration: none; }
-.nav-toggle {
-  background: none; color: #fff; font: inherit; cursor: pointer;
-  border: 1px solid rgba(255,255,255,.45); border-radius: 8px; padding: .4rem .8rem; min-height: 40px;
-}
-.nav { display: none; flex-direction: column; width: 100%; padding: .5rem 0 .25rem; }
-.nav.open { display: flex; }
-.nav a { color: #dbe2f2; text-decoration: none; padding: .7rem .8rem; border-radius: 8px; }
-.nav a:hover { background: rgba(255,255,255,.12); }
-.nav a[aria-current="page"] { background: #fff; color: #1f2a44; font-weight: 600; }
-@media (min-width: 800px) {
-  .nav-toggle { display: none; }
-  .nav { display: flex; flex-direction: row; width: auto; padding: 0; gap: .25rem; }
-  .nav a { padding: .45rem .8rem; }
-}
-
-/* 4. Cards and layout helpers */
-.card {
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow);
-}
-.grid { display: grid; gap: 1rem; }
-.cols-2 { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
-.cols-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.stats { grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 800px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-.stack > * + * { margin-top: 1rem; }
-.stat .num { font-family: Georgia, serif; font-size: 2rem; font-weight: 700; line-height: 1.1; }
-.tile { display: block; text-decoration: none; color: inherit; }
-.tile:hover { border-color: var(--blue); }
-.notice { border-left: 4px solid var(--gold); background: var(--gold-bg); padding: .75rem 1rem; border-radius: 8px; }
-.row-between { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; }
-
-/* 5. Forms */
-.field { display: flex; flex-direction: column; gap: .3rem; margin-bottom: .9rem; }
-.field label { font-weight: 600; font-size: .92rem; }
-input, select {
-  font: inherit; color: var(--ink); background: var(--card); width: 100%; min-height: 44px;
-  border: 1.5px solid var(--line); border-radius: 8px; padding: .55rem .75rem;
-}
-input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
-  outline: 3px solid var(--blue); outline-offset: 1px;
-}
-.field.invalid input, .field.invalid select { border-color: var(--red); }
-.error { color: var(--red); font-size: .85rem; }
-.error:empty { display: none; }
-.form-row { display: grid; gap: 0 1rem; grid-template-columns: 1fr; }
-@media (min-width: 600px) { .form-row { grid-template-columns: 1fr 1fr; } }
-
-/* 6. Buttons and badges */
-.btn {
-  font: inherit; font-weight: 600; cursor: pointer; min-height: 44px;
-  background: var(--btn); color: var(--btn-text);
-  border: 1.5px solid transparent; border-radius: 8px; padding: .55rem 1rem;
-}
-.btn.secondary { background: transparent; color: var(--ink); border-color: var(--line); }
-.btn.danger { background: var(--red); color: #fff; }
-.btn.sm { min-height: 36px; padding: .25rem .7rem; font-size: .9rem; }
-.btn:disabled { opacity: .5; cursor: not-allowed; }
-.btn-row { display: flex; flex-wrap: wrap; gap: .5rem; }
-.badge { display: inline-block; padding: .1rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; white-space: nowrap; }
-.badge.green { background: var(--green-bg); color: var(--green); }
-.badge.gold  { background: var(--gold-bg);  color: var(--gold); }
-.badge.red   { background: var(--red-bg);   color: var(--red); }
-.badge.blue  { background: var(--blue-bg);  color: var(--blue); }
-
-/* 7. Tables (on phones each row becomes a small card) */
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; }
-th, td { text-align: left; padding: .65rem .75rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
-th { font-size: .85rem; color: var(--ink-soft); font-weight: 600; white-space: nowrap; }
-.avatar {
-  width: 34px; height: 34px; border-radius: 50%; flex: none; display: inline-grid; place-items: center;
-  background: var(--blue-bg); color: var(--blue); font-weight: 700; font-size: .8rem;
-}
-.person { display: flex; align-items: center; gap: .6rem; text-align: left; }
-@media (max-width: 700px) {
-  .responsive-table thead { display: none; }
-  .responsive-table tr {
-    display: block; margin-bottom: .75rem; padding: .4rem .75rem;
-    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-  }
-  .responsive-table td {
-    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-    border: none; padding: .35rem 0; text-align: right;
-  }
-  .responsive-table td::before { content: attr(data-label); font-weight: 600; color: var(--ink-soft); text-align: left; }
-}
-
-/* 8. Bars (progress and charts) */
-.bar { height: 10px; background: var(--line); border-radius: 99px; overflow: hidden; }
-.bar > span { display: block; height: 100%; background: var(--btn); border-radius: 99px; }
-.bar.warn > span { background: var(--gold); }
-.bar-row { display: grid; grid-template-columns: 90px 1fr 70px; gap: .6rem; align-items: center; margin-bottom: .6rem; font-size: .9rem; }
-.bar-row .value { text-align: right; font-weight: 600; }
-
-/* 9. Attendance buttons: P = present, L = late, A = absent */
-.seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 8px; overflow: hidden; }
-.seg button {
-  font: inherit; font-weight: 600; cursor: pointer; min-height: 40px; min-width: 48px;
-  background: var(--card); color: var(--ink); border: 0; padding: .4rem .8rem;
-}
-.seg button + button { border-left: 1.5px solid var(--line); }
-.seg button.on-P { background: var(--btn); color: var(--btn-text); }
-.seg button.on-L { background: var(--gold); color: #fff; }
-.seg button.on-A { background: var(--red); color: #fff; }
-@media (prefers-color-scheme: dark) {
-  .seg button.on-L, .seg button.on-A { color: #0f1524; }
-}
-.att-row { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-
-/* 10. Pop-up dialog and toast message */
-dialog {
-  border: none; border-radius: var(--radius); padding: 1.25rem; background: var(--card); color: var(--ink);
-  width: calc(100% - 2rem); max-width: 540px; max-height: 92vh; box-shadow: 0 20px 60px rgba(0,0,0,.35);
-}
-dialog::backdrop { background: rgba(10,15,30,.55); }
-#toast {
-  position: fixed; left: 50%; bottom: 1.25rem; transform: translate(-50%, 20px); z-index: 50;
-  max-width: 90%; padding: .7rem 1.1rem; border-radius: 10px; background: var(--nav); color: #fff;
-  opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
-}
-#toast.show { opacity: 1; transform: translate(-50%, 0); }
-#toast.error { background: var(--red); color: #fff; }
-footer { text-align: center; color: var(--ink-soft); font-size: .85rem; padding: 1.5rem 1rem 2rem; }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-
-/* 11. Printing (reports page): hide menus and buttons */
-@media print {
-  .site-header, .no-print, footer, #toast { display: none !important; }
-  body { background: #fff; color: #000; }
-  .card { box-shadow: none; break-inside: avoid; }
-}
-
-</style>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
 </head>
+
 <body>
 
-<!-- Top bar with links to all six pages -->
 <header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="index.html">Lakeside ICT Academy</a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Main">
-      <a href="index.html" aria-current="page">Home</a>
-      <a href="students.html">Register</a>
-      <a href="records.html">Records</a>
-      <a href="courses.html">Courses</a>
-      <a href="attendance.html">Attendance</a>
-      <a href="reports.html">Reports</a>
-    </nav>
-  </div>
+    <div class="header-inner">
+
+        <a class="brand" href="index.html">
+            Lakeside ICT Academy
+        </a>
+
+        <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav">
+            Menu
+        </button>
+
+        <nav class="nav" id="site-nav" aria-label="Main navigation">
+            <a href="index.html" aria-current="page">Home</a>
+            <a href="pages/students.html">Register</a>
+            <a href="pages/records.html">Records</a>
+            <a href="pages/courses.html">Courses</a>
+            <a href="pages/attendance.html">Attendance</a>
+            <a href="pages/reports.html">Reports</a>
+        </nav>
+
+    </div>
 </header>
 
 <main class="container">
-<div class="page-title">
-  <h1>Student Management System</h1>
-  <p class="muted">Lakeside ICT Academy &ndash; a learning project with sample students.</p>
-</div>
 
-<!-- Summary numbers are filled in by JavaScript below -->
-<section class="grid stats" aria-label="Summary">
-  <div class="card stat"><div class="num" id="st-students">0</div><div class="muted">Students enrolled</div></div>
-  <div class="card stat"><div class="num" id="st-courses">0</div><div class="muted">Courses offered</div></div>
-  <div class="card stat"><div class="num" id="st-score">0</div><div class="muted">Average score</div></div>
-  <div class="card stat"><div class="num" id="st-today">-</div><div class="muted" id="st-today-label">Today's attendance</div></div>
-</section>
+    <section class="page-title">
+        <h1>Student Management System</h1>
+        <p class="muted">
+            Lakeside ICT Academy — manage students, courses,
+            attendance and academic reports.
+        </p>
+    </section>
 
-<h2 style="margin-top:1.75rem">Go to</h2>
-<section class="grid cols-3">
-  <a class="card tile" href="students.html"><h3>Register a student</h3><p class="muted">Add a new student with a validated form.</p></a>
-  <a class="card tile" href="records.html"><h3>Student records</h3><p class="muted">Search, sort, edit, delete and export.</p></a>
-  <a class="card tile" href="courses.html"><h3>Courses</h3><p class="muted">See seats, instructors and who is enrolled.</p></a>
-  <a class="card tile" href="attendance.html"><h3>Attendance</h3><p class="muted">Mark present, late or absent for any day.</p></a>
-  <a class="card tile" href="reports.html"><h3>Reports</h3><p class="muted">Enrolment, scores and attendance summaries.</p></a>
-</section>
+    <section class="grid stats" aria-label="Student statistics">
 
-<section class="card" style="margin-top:1.75rem">
-  <h2>Newest students</h2>
-  <div class="table-wrap">
-    <table class="responsive-table">
-      <thead><tr><th>ID</th><th>Name</th><th>Course</th><th>Status</th></tr></thead>
-      <tbody id="recent"></tbody>
-    </table>
-  </div>
-</section>
+        <div class="card stat">
+            <div class="num" id="st-students">0</div>
+            <div class="muted">Students enrolled</div>
+        </div>
 
-<section class="notice" style="margin-top:1.75rem">
-  <strong>About saving:</strong> changes are kept in this browser only (localStorage).
-  They are not on a server, other devices cannot see them, and clearing browser data removes them.
-  <div class="btn-row" style="margin-top:.75rem">
-    <button class="btn secondary sm" id="reset-btn" type="button">Restore sample data</button>
-  </div>
-</section>
+        <div class="card stat">
+            <div class="num" id="st-courses">0</div>
+            <div class="muted">Courses offered</div>
+        </div>
 
-</main>
-
-<footer>Sample data only. Changes are saved in this browser (localStorage), not on a server.</footer>
-<div id="toast" role="status" aria-live="polite"></div>
-
-<script>
-/* ==========================================================
-   Student Management System - shared JavaScript
-   Every page contains this block so each file works alone.
-
-   HOW DATA IS STORED
-   - The first time you open any page, realistic SAMPLE data is created.
-   - Changes you make are saved with localStorage, which keeps them in
-     THIS browser on THIS device only (there is no server or database).
-   - Clearing your browser data removes them. Pages opened from a
-     different address (file:// vs GitHub Pages) keep separate copies.
-   ========================================================== */
-
-const STORAGE_KEY = 'sms-data-v1';
-
-/* ---------- Date helpers ---------- */
-function pad(n) { return String(n).padStart(2, '0'); }
-function dateStr(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
-function todayStr() { return dateStr(new Date()); }
-function fmtDate(iso) {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-/* ---------- Sample data (made-up people, for learning only) ---------- */
-function buildSeed() {
-  const courses = [
-    { code: 'ICT101', name: 'Introduction to ICT', instructor: 'Ms. Rachel Adeyemi', credits: 3, capacity: 30, schedule: 'Mon & Wed 09:00-10:30', room: 'Lab A' },
-    { code: 'PRG110', name: 'Programming Fundamentals (Python)', instructor: 'Mr. David Kimani', credits: 4, capacity: 25, schedule: 'Tue & Thu 11:00-12:30', room: 'Lab B' },
-    { code: 'WEB201', name: 'Web Development: HTML, CSS and JavaScript', instructor: 'Dr. Hannah Lindqvist', credits: 4, capacity: 25, schedule: 'Mon & Wed 13:00-14:30', room: 'Lab C' },
-    { code: 'DBS220', name: 'Database Systems', instructor: 'Mr. Samuel Ortega', credits: 3, capacity: 20, schedule: 'Fri 09:00-12:00', room: 'Room 204' },
-    { code: 'NET230', name: 'Computer Networking', instructor: 'Ms. Aisha Rahman', credits: 3, capacity: 20, schedule: 'Tue & Thu 14:00-15:30', room: 'Room 112' }
-  ];
-
-  // first, last, gender, date of birth, course, year, status, average score
-  const rows = [
-    ['Amara', 'Okafor', 'Female', '2006-03-14', 'WEB201', 2, 'Active', 88],
-    ['Daniel', 'Mensah', 'Male', '2005-11-02', 'PRG110', 2, 'Active', 76],
-    ['Sofia', 'Hernandez', 'Female', '2007-06-21', 'ICT101', 1, 'Active', 91],
-    ['Liam', 'Chen', 'Male', '2006-01-30', 'DBS220', 3, 'Active', 69],
-    ['Fatima', 'Al-Sayed', 'Female', '2005-09-08', 'NET230', 3, 'Active', 84],
-    ['Noah', 'Williams', 'Male', '2007-02-17', 'ICT101', 1, 'On leave', 58],
-    ['Priya', 'Sharma', 'Female', '2006-08-25', 'WEB201', 2, 'Active', 95],
-    ['Kwame', 'Boateng', 'Male', '2004-12-11', 'DBS220', 3, 'Graduated', 81],
-    ['Elena', 'Petrova', 'Female', '2006-05-03', 'PRG110', 2, 'Active', 73],
-    ['Tariq', 'Hassan', 'Male', '2007-10-19', 'NET230', 1, 'Active', 64],
-    ['Grace', 'Njoroge', 'Female', '2005-04-27', 'WEB201', 3, 'Active', 79],
-    ['Mateo', 'Silva', 'Male', '2007-07-09', 'PRG110', 1, 'Active', 67]
-  ];
-  const students = rows.map((r, i) => ({
-    id: 'STU-' + (1001 + i),
-    firstName: r[0], lastName: r[1],
-    email: (r[0] + '.' + r[1]).toLowerCase().replace(/[^a-z.]/g, '') + '@example.com',
-    phone: '+1 555 01' + pad(i + 10),
-    gender: r[2], dob: r[3], course: r[4], year: r[5], status: r[6], score: r[7]
-  }));
-
-  // Past attendance for the last 6 weekdays: P = present, L = late, A = absent
-  const attendance = {};
-  const d = new Date();
-  let made = 0;
-  while (made < 6) {
-    d.setDate(d.getDate() - 1);
-    if (d.getDay() === 0 || d.getDay() === 6) continue; // skip weekends
-    const day = {};
-    students.forEach((s, i) => {
-      if (s.status !== 'Active') return;
-      const v = (i * 7 + made * 3 + i * made) % 10; // repeatable pattern, not random
-      day[s.id] = v < 7 ? 'P' : (v < 8 ? 'L' : 'A');
-    });
-    attendance[dateStr(d)] = day;
-    made++;
-  }
-  return { students, courses, attendance };
-}
-
-/* ---------- Load and save ---------- */
-function loadData() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const saved = JSON.parse(raw);
-      if (saved && saved.students && saved.courses && saved.attendance) return saved;
-    }
-  } catch (err) { console.warn('Could not read saved data:', err); }
-  return buildSeed();
-}
-function saveData() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); }
-  catch (err) { toast('Your browser blocked storage, so changes last only until you leave this page.', 'error'); }
-}
-let db = loadData();
-
-function resetSampleData() {
-  if (!confirm('Replace everything with the original sample data? Your changes will be lost.')) return;
-  db = buildSeed();
-  saveData();
-  location.reload();
-}
-
-/* ---------- Small helpers ---------- */
-const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
-
-// Turns text into safe HTML so typed names can never break the page
-function esc(v) {
-  return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-function fullName(s) { return s.firstName + ' ' + s.lastName; }
-function initials(s) { return (s.firstName[0] + s.lastName[0]).toUpperCase(); }
-function getCourse(code) { return db.courses.find(c => c.code === code); }
-function courseLabel(code) { const c = getCourse(code); return c ? c.code + ' - ' + c.name : code; }
-// Seats in use: graduated students no longer take a seat
-function enrolledCount(code) { return db.students.filter(s => s.course === code && s.status !== 'Graduated').length; }
-function nextStudentId() {
-  const nums = db.students.map(s => parseInt(s.id.replace('STU-', ''), 10) || 0);
-  return 'STU-' + (Math.max(1000, ...nums) + 1);
-}
-function statusBadge(status) {
-  const cls = { 'Active': 'green', 'On leave': 'gold', 'Graduated': 'blue' }[status] || 'blue';
-  return '<span class="badge ' + cls + '">' + esc(status) + '</span>';
-}
-// Counts a student's saved attendance. Late counts as attended.
-function attendanceStats(studentId) {
-  const t = { P: 0, L: 0, A: 0, total: 0, rate: null };
-  Object.values(db.attendance).forEach(day => { if (day[studentId]) { t[day[studentId]]++; t.total++; } });
-  if (t.total) t.rate = Math.round((t.P + t.L) / t.total * 100);
-  return t;
-}
-
-/* ---------- Forms: read values and show error messages ---------- */
-// Each field is <div class="field" data-field="name"> ... <div class="error"></div></div>
-function readForm(form) {
-  const out = {};
-  new FormData(form).forEach((v, k) => { out[k] = typeof v === 'string' ? v.trim() : v; });
-  return out;
-}
-function showErrors(form, errors) {
-  $$('.field', form).forEach(f => {
-    const msg = errors[f.dataset.field] || '';
-    f.classList.toggle('invalid', !!msg);
-    $('.error', f).textContent = msg;
-    const input = $('input, select', f);
-    if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-  });
-}
-
-/* ---------- Toast message at the bottom of the screen ---------- */
-let toastTimer;
-function toast(message, type) {
-  const el = $('#toast');
-  el.textContent = message;
-  el.className = 'show' + (type === 'error' ? ' error' : '');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.className = ''; }, 3200);
-}
-
-/* ---------- Menu button on small screens ---------- */
-$('.nav-toggle').addEventListener('click', () => {
-  const open = $('#site-nav').classList.toggle('open');
-  $('.nav-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-
-
-/* ---------- Home page ---------- */
-function renderHome() {
-  // 1. Summary numbers
-  $('#st-students').textContent = db.students.length;
-  $('#st-courses').textContent = db.courses.length;
-
-  const scores = db.students.filter(s => typeof s.score === 'number').map(s => s.score);
-  $('#st-score').textContent = scores.length
-    ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) + '%'
-    : '-';
-
-  // 2. Today's attendance (only if someone has taken it today)
-  const today = db.attendance[todayStr()];
-  if (today) {
-    const marks = Object.values(today);
-    const attended = marks.filter(m => m !== 'A').length;
-    $('#st-today').textContent = Math.round(attended / marks.length * 100) + '%';
-    $('#st-today-label').textContent = "Present or late today";
-  } else {
-    $('#st-today').textContent = 'Not taken';
-    $('#st-today-label').textContent = "Today's attendance";
-  }
-
-  // 3. The five newest students (highest ID numbers)
-  const newest = [...db.students]
-    .sort((a, b) => parseInt(b.id.slice(4), 10) - parseInt(a.id.slice(4), 10))
-    .slice(0, 5);
-  $('#recent').innerHTML = newest.map(s =>
-    '<tr>' +
-      '<td data-label="ID">' + esc(s.id) + '</td>' +
-      '<td data-label="Name"><div class="person"><span class="avatar">' + esc(initials(s)) + '</span>' + esc(fullName(s)) + '</div></td>' +
-      '<td data-label="Course">' + esc(s.course) + '</td>' +
-      '<td data-label="Status">' + statusBadge(s.status) + '</td>' +
-    '</tr>'
-  ).join('');
-}
-
-$('#reset-btn').addEventListener('click', resetSampleData);
-renderHome();
-<link rel="stylesheet" href="css/style.css">
-<script src="js/script.js" defer></script>
-
-</script>
-</head>
-</body>
-</html>
+        <div class="card stat">
+            <div class="num" id="st-score">0%</div>
+            <div class="
