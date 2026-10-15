@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Mobile navigation menu
+    // Mobile navigation
     const menuButton = document.querySelector(".nav-toggle");
     const navigation = document.querySelector(".nav");
 
@@ -9,84 +9,168 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Current date
-    const today = new Date();
+    // Student management
+    const form = document.getElementById("student-form");
 
-    const dateLabel = document.getElementById("st-today-label");
-    if (dateLabel) {
-        dateLabel.textContent = today.toLocaleDateString("en-KE", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        });
-    }
+    if (form) {
+        const nameInput = document.getElementById("student-name");
+        const admissionInput = document.getElementById("student-admission");
+        const courseInput = document.getElementById("student-course");
+        const phoneInput = document.getElementById("student-phone");
+        const idInput = document.getElementById("student-id");
+        const list = document.getElementById("student-list");
+        const search = document.getElementById("student-search");
+        const message = document.getElementById("student-message");
+        const formTitle = document.getElementById("form-title");
 
-    // Sample student and course data
-    const students = [
-        { id: 1, name: "John Kamau", course: "Computer Science" },
-        { id: 2, name: "Mary Wanjiku", course: "Information Technology" },
-        { id: 3, name: "Brian Otieno", course: "Computer Science" },
-        { id: 4, name: "Grace Akinyi", course: "Business IT" },
-        { id: 5, name: "Peter Mwangi", course: "Networking" }
-    ];
+        let students = [];
 
-    const courses = [
-        "Computer Science",
-        "Information Technology",
-        "Business IT",
-        "Networking"
-    ];
+        try {
+            students = JSON.parse(
+                localStorage.getItem("studentRecords") || "[]"
+            );
+        } catch (error) {
+            students = [];
+        }
 
-    // Update dashboard statistics
-    const studentCount = document.getElementById("st-students");
-    const courseCount = document.getElementById("st-courses");
-    const scoreCount = document.getElementById("st-score");
-    const recentTable = document.getElementById("recent");
+        function saveStudents() {
+            localStorage.setItem("studentRecords", JSON.stringify(students));
+        }
 
-    if (studentCount) {
-        studentCount.textContent = students.length;
-    }
+        function showMessage(text) {
+            message.textContent = text;
+        }
 
-    if (courseCount) {
-        courseCount.textContent = courses.length;
-    }
+        function renderStudents() {
+            const term = search.value.toLowerCase().trim();
+            list.replaceChildren();
 
-    if (scoreCount) {
-        scoreCount.textContent = "0%";
-    }
-
-    // Display recent students on the home page
-    if (recentTable) {
-        recentTable.innerHTML = "";
-
-        students.slice(0, 5).forEach(function (student) {
-            const row = document.createElement("tr");
-
-            [student.id, student.name, student.course].forEach(function (value) {
-                const cell = document.createElement("td");
-                cell.textContent = value;
-                row.appendChild(cell);
+            const filtered = students.filter(function (student) {
+                return (
+                    student.name.toLowerCase().includes(term) ||
+                    student.admission.toLowerCase().includes(term) ||
+                    student.course.toLowerCase().includes(term) ||
+                    student.phone.toLowerCase().includes(term)
+                );
             });
 
-            recentTable.appendChild(row);
-        });
-    }
-
-    // Reset dashboard button
-    const resetButton = document.getElementById("reset-btn");
-    if (resetButton) {
-        resetButton.addEventListener("click", function () {
-            if (confirm("Reset the dashboard display?")) {
-                if (studentCount) studentCount.textContent = "0";
-                if (courseCount) courseCount.textContent = "0";
-                if (scoreCount) scoreCount.textContent = "0%";
-                if (recentTable) recentTable.innerHTML = "";
-
-                alert("Dashboard display reset.");
+            if (filtered.length === 0) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                cell.colSpan = 5;
+                cell.textContent = students.length
+                    ? "No matching students found."
+                    : "No students registered yet.";
+                row.appendChild(cell);
+                list.appendChild(row);
+                return;
             }
+
+            filtered.forEach(function (student) {
+                const row = document.createElement("tr");
+
+                [student.name, student.admission, student.course, student.phone]
+                    .forEach(function (value) {
+                        const cell = document.createElement("td");
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    });
+
+                const actions = document.createElement("td");
+
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.textContent = "Edit";
+                editButton.className = "btn sm";
+                editButton.addEventListener("click", function () {
+                    idInput.value = student.id;
+                    nameInput.value = student.name;
+                    admissionInput.value = student.admission;
+                    courseInput.value = student.course;
+                    phoneInput.value = student.phone;
+                    formTitle.textContent = "Edit Student";
+                    form.scrollIntoView({ behavior: "smooth" });
+                });
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.textContent = "Delete";
+                deleteButton.className = "btn sm secondary";
+                deleteButton.style.marginLeft = "6px";
+                deleteButton.addEventListener("click", function () {
+                    if (confirm("Delete " + student.name + "?")) {
+                        students = students.filter(function (item) {
+                            return item.id !== student.id;
+                        });
+                        saveStudents();
+                        renderStudents();
+                        showMessage("Student deleted.");
+                    }
+                });
+
+                actions.append(editButton, deleteButton);
+                row.appendChild(actions);
+                list.appendChild(row);
+            });
+        }
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const student = {
+                id: idInput.value || String(Date.now()),
+                name: nameInput.value.trim(),
+                admission: admissionInput.value.trim(),
+                course: courseInput.value,
+                phone: phoneInput.value.trim()
+            };
+
+            if (!student.name || !student.admission || !student.course) {
+                showMessage("Please fill in all required fields.");
+                return;
+            }
+
+            const duplicate = students.some(function (item) {
+                return item.admission.toLowerCase() ===
+                    student.admission.toLowerCase() &&
+                    item.id !== student.id;
+            });
+
+            if (duplicate) {
+                showMessage("That admission number already exists.");
+                return;
+            }
+
+            const existingIndex = students.findIndex(function (item) {
+                return item.id === student.id;
+            });
+
+            if (existingIndex >= 0) {
+                students[existingIndex] = student;
+                showMessage("Student updated successfully.");
+            } else {
+                students.push(student);
+                showMessage("Student registered successfully.");
+            }
+
+            saveStudents();
+            form.reset();
+            idInput.value = "";
+            formTitle.textContent = "Register a Student";
+            renderStudents();
         });
+
+        form.addEventListener("reset", function () {
+            setTimeout(function () {
+                idInput.value = "";
+                formTitle.textContent = "Register a Student";
+            }, 0);
+        });
+
+        search.addEventListener("input", renderStudents);
+
+        renderStudents();
     }
 
-    console.log("Student Management System loaded successfully.");
+    console.log("Student Management System loaded.");
 });
